@@ -4,58 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab4
+namespace Lab5
 {
     internal class Function
     {
-        private Func<double, double> myFunc;
-        private Func<double, double> df;
-        private Func<double, double> ddf;
+        public Func<double, double, double> MyFunc;
+        private Func<double, double, double> Map1;
+        private Func<double, double, double> DMap1;
 
         public double eps { get; set; }
 
-        public Function(Func<double, double> func)
+
+        public Function(Func<double, double, double> func,
+            Func<double, double, double> map1,
+            Func<double, double, double> dMap1, double eps = 1e-5)
         {
-            myFunc = func;
-            eps = 1e-5;
+            this.MyFunc = func;
+            this.Map1 = map1;
+            this.DMap1 = dMap1;
+            this.eps = eps;
         }
 
-        public Function(Func<double, double> func, Func<double, double> df, Func<double, double> ddf)
+        public Function(Function other)
         {
-            this.myFunc = func;
-            this.df = df;
-            this.ddf = ddf;
-            eps = 1e-5;
+            this.MyFunc = other.MyFunc;
+            this.Map1 = other.Map1;
+            this.DMap1 = other.DMap1;
+            this.eps = other.eps;
         }
 
-        public Function(Function func)
-        {
-            myFunc = func.myFunc;
-            df = func.df;
-            ddf = func.ddf;
-            eps = func.eps;
-        }
-
-        public void SetFunc(Func<double, double> func) => myFunc = func;
-
-        public void SetDf(Func<double, double> df) => this.df = df;
-        public void SetDdf(Func<double, double> ddf) => this.ddf = ddf;
-
-        public double Df(double x)
-        {
-            if (this.df == null)
-                return (myFunc(x + eps) - myFunc(x - eps)) / (2 * eps);
-            else
-                return this.df(x);
-        }
-        public double Ddf(double x)
-        {
-            if (this.ddf == null)
-                return (Df(x + eps) - Df(x - eps)) / (2 * eps);
-            else
-                return this.ddf(x);
-        }
-        public double Value(double x) => myFunc(x);
+        public double FuncValue(double x, double y) => MyFunc(x, y);
+        public double Map1Value(double x, double y) => Map1(x, y);
+        public double DMap1Value(double x, double y) => DMap1(x, y);      
 
         public static double MaximumInTheInterval(Func<double, double> func, double begin, double end, double eps = 1e-2)
         {
