@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab5
 {
-    internal class Function
+    public class Function
     {
         public Func<double, double, double> MyFunc;
         private Func<double, double, double> Map1;
